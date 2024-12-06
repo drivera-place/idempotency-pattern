@@ -13,3 +13,11 @@ output "servicebus_namespace_name" {
 output "servicebus_queue_name" {
   value = module.queue.name
 }
+
+output "producer_function_name" {
+  value = module.producer_function.name
+}
+
+output "consumer_function_name" {
+  value = module.consumer_function.name
+}
