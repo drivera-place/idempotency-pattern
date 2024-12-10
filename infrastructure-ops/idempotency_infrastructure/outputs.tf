@@ -21,3 +21,24 @@ output "producer_function_name" {
 output "consumer_function_name" {
   value = module.consumer_function.name
 }
+
+output "postgresql_server_name" {
+  value = module.postgresql_flexible_server.server_name
+}
+
+output "database_name" {
+  value = module.database.name
+}
+
+output "postgresql_server_admin_password" {
+  sensitive = true
+  value     = module.postgresql_flexible_server.administrator_password
+}
+
+output "postgresql_server_host" {
+  value = module.postgresql_flexible_server.server_fqdn
+}
+
+output "postgresql_server_administrator_login" {
+  value = var.administrator_login
+}

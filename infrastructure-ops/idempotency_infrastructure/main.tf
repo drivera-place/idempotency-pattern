@@ -3,6 +3,10 @@ resource "random_pet" "name_prefix" {
   length = 1
 }
 
+resource "random_password" "pass" {
+  length = 20
+}
+
 # create the resource group
 module "resource_group" {
   source      = "../modules/resource_group"
@@ -94,4 +98,33 @@ module "consumer_function" {
   application_insights_key               = module.application_insights.key
   service_bus_connection_string          = module.servicebus_namespace.default_primary_connection_string
   depends_on                             = [module.servicebus_namespace]
+}
+
+# Create the flexible server
+module "postgresql_flexible_server" {
+  source                        = "../modules/postgresql_flexible_server"
+  administrator_login           = var.administrator_login
+  administrator_password        = random_password.pass.result
+  name_prefix                   = var.name_prefix
+  location                      = module.resource_group.location
+  resource_group_name           = module.resource_group.name
+  public_network_access_enabled = var.public_network_access_enabled
+  depends_on                    = [module.resource_group]
+}
+
+# Create the DB
+module "database" {
+  source      = "../modules/database"
+  name_prefix = var.name_prefix
+  server_id   = module.postgresql_flexible_server.server_id
+  depends_on  = [module.postgresql_flexible_server]
+}
+
+# Add firewall rule
+module "firewall-rule" {
+  source           = "../modules/firewall_rule"
+  server_id        = module.postgresql_flexible_server.server_id
+  start_ip_address = var.start_ip_address
+  end_ip_address   = var.end_ip_address
+  depends_on       = [module.postgresql_flexible_server]
 }

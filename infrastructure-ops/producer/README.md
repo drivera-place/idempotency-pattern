@@ -38,7 +38,7 @@ func start
 
 ```bash
 curl -H 'Content-Type: application/json' \
--d '{ "contract" : "0001", "user" : "drivera-place"}' \
+-d '{ "contractid" : "0001", "name" : "drivera-place"}' \
 -X POST \
 http://localhost:7071/api/Producer
 ```

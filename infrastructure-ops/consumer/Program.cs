@@ -1,13 +1,25 @@
+using consumer.DataAccess.PostgreSQL;
 using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-var builder = FunctionsApplication.CreateBuilder(args);
+namespace consumer
+{
+    public class Program
+    {
+        private static void Main(string[] args)
+        {
+            var builder = FunctionsApplication.CreateBuilder(args);
+            builder.Services.AddDbContextPool<ContractDBContext>(opt =>
+            {
+                opt.UseNpgsql(builder.Configuration.GetSection("PostgreSQLConnectionString").Value);
+            });
 
-builder.ConfigureFunctionsWebApplication();
+            builder.Services.AddScoped<IContractRepository,ContractRepository>();
 
-// Application Insights isn't enabled by default. See https://aka.ms/AAt8mw4.
-// builder.Services
-//     .AddApplicationInsightsTelemetryWorkerService()
-//     .ConfigureFunctionsApplicationInsights();
-
-builder.Build().Run();
+            builder.Build().Run();
+        }
+    }
+}
