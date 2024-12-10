@@ -128,3 +128,12 @@ module "firewall-rule" {
   end_ip_address   = var.end_ip_address
   depends_on       = [module.postgresql_flexible_server]
 }
+
+# Add table storage
+module "idempotency_storage_table" {
+  source = "../modules/storage_table"
+  location = module.resource_group.location
+  name_prefix = var.name_prefix
+  storage_account_name = module.storage_account.name
+  depends_on = [ module.storage_account ]
+}

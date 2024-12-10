@@ -20,7 +20,9 @@ namespace consumer
         public async Task Run(
             [ServiceBusTrigger("poc-servicebus-queue", Connection = "ServiceBusConnection", AutoCompleteMessages = false)]
             ServiceBusReceivedMessage message,
-            ServiceBusMessageActions messageActions)
+            ServiceBusMessageActions messageActions,
+            [TableInput("pocstidempotency","idempotencykey", Connection = "StorageAccConnectionString", Filter ="message_hash_key eq  'Hash", Take = 1)]
+            ProcessedMessageEntity processedMessage)
         {
             var body = message.Body;
             _logger.LogInformation("Message ID: {id}", message.MessageId);
