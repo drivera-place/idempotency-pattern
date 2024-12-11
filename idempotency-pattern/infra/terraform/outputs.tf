@@ -45,7 +45,12 @@ output "postgresql_server_administrator_login" {
 
 output "storage_account_access_key" {
   sensitive = true
-  value = module.storage_account.primary_access_key
+  value     = module.storage_account.primary_access_key
+}
+
+output "storage_acc_connection_string" {
+  sensitive = true
+  value     = module.storage_account.connection_string
 }
 
 output "idempotency_storage_table" {

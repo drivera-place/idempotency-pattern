@@ -29,7 +29,6 @@ module "queue" {
   name_prefix          = var.name_prefix
   resource_group_name  = module.resource_group.name
   location             = module.resource_group.location
-  partitioning_enabled = true
   namespace_id         = module.servicebus_namespace.id
   depends_on           = [module.servicebus_namespace]
 }

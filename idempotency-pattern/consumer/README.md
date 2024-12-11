@@ -22,14 +22,14 @@ dotnet add package Microsoft.Azure.Functions.Worker.Extensions.ServiceBus --vers
 ## Run locally
 
 ```bash
-export resource_group_name=$(cd ../idempotency_infrastructure && terraform output -raw resource_group_name) \
-export servicebus_namespace_name=$(cd ../idempotency_infrastructure && terraform output -raw servicebus_namespace_name) \
-export consumer_function_name=$(cd ../idempotency_infrastructure && terraform output -raw consumer_function_name) \
-export host=$(cd ../idempotency_infrastructure && terraform output -raw postgresql_server_host) \
-export database_name=$(cd ../idempotency_infrastructure && terraform output -raw database_name) \
-export admin_login=$(cd ../idempotency_infrastructure && terraform output -raw postgresql_server_administrator_login) \
-export admin_pwd=$(cd ../idempotency_infrastructure && terraform output -raw postgresql_server_admin_password) \
-export storage_account_access_key=$(cd ../idempotency_infrastructure && terraform output -raw storage_account_access_key)
+export resource_group_name=$(cd ../infra/terraform && terraform output -raw resource_group_name) \
+export servicebus_namespace_name=$(cd ../infra/terraform && terraform output -raw servicebus_namespace_name) \
+export consumer_function_name=$(cd ../infra/terraform && terraform output -raw consumer_function_name) \
+export host=$(cd ../infra/terraform && terraform output -raw postgresql_server_host) \
+export database_name=$(cd ../infra/terraform && terraform output -raw database_name) \
+export admin_login=$(cd ../infra/terraform && terraform output -raw postgresql_server_administrator_login) \
+export admin_pwd=$(cd ../infra/terraform && terraform output -raw postgresql_server_admin_password) \
+export storage_acc_connection_string=$(cd ../infra/terraform && terraform output -raw storage_acc_connection_string)
 ```
 
 ```bash
@@ -42,6 +42,7 @@ func settings add ServiceBusConnection
 ```bash
 # Add PostgreSQL Connection String it to your local.settings.json:
 export postgres_connection_string="Host=$host;Username=$admin_login;Password=$admin_pwd;Database=$database_name;Ssl Mode=Require;"
+echo $postgres_connection_string
 
 func settings add PostgreSQLConnectionString
 ```
@@ -52,8 +53,8 @@ func start
 
 ```bash
 # Add Storage Account Connection String it to your local.settings.json:
-export storage_account_access_key=$(cd ../idempotency_infrastructure && terraform output -raw storage_account_access_key)
-echo $storage_account_access_key
+export storage_acc_connection_string=$(cd ../infra/terraform && terraform output -raw storage_acc_connection_string)
+echo $storage_acc_connection_string
 
 func settings add StorageAccConnectionString
 ```
@@ -65,6 +66,6 @@ func start
 ## Publish app to Azure
 
 ```bash
-export consumer_function_name=$(cd ../idempotency_infrastructure && terraform output -raw consumer_function_name) && \
+export consumer_function_name=$(cd ../infra/terraform && terraform output -raw consumer_function_name) && \
 func azure functionapp publish $consumer_function_name --publish-local-settings
 ```
