@@ -29,7 +29,6 @@ module "queue" {
   name_prefix          = var.name_prefix
   resource_group_name  = module.resource_group.name
   location             = module.resource_group.location
-  partitioning_enabled = true
   namespace_id         = module.servicebus_namespace.id
   depends_on           = [module.servicebus_namespace]
 }
@@ -127,4 +126,13 @@ module "firewall-rule" {
   start_ip_address = var.start_ip_address
   end_ip_address   = var.end_ip_address
   depends_on       = [module.postgresql_flexible_server]
+}
+
+# Add table storage
+module "idempotency_storage_table" {
+  source = "../modules/storage_table"
+  location = module.resource_group.location
+  name_prefix = var.name_prefix
+  storage_account_name = module.storage_account.name
+  depends_on = [ module.storage_account ]
 }

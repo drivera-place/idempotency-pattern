@@ -18,12 +18,12 @@ namespace consumer
             //var tmp = _dbContext.Contracts.Add(contract);
             //_dbContext.SaveChanges();
 
+            // 2nd way to avoid duplicates, not necessary for indempotency but it could help.
             string insertStatement = "INSERT INTO contracts (contractid, name) VALUES (@p0, @p1) ON CONFLICT (contractid) DO NOTHING;";
             _dbContext.Database.ExecuteSqlRaw(insertStatement, contract.ContractId, contract.Name);
 
             return true;
         }
-
 
         public Task<IEnumerable<Contract>> GetAll()
         {

@@ -13,7 +13,3 @@ variable "resource_group_name" {
 variable "namespace_id" {
   default = "tmp-ns"
 }
-
-variable "partitioning_enabled" {
-  default = true
-}
