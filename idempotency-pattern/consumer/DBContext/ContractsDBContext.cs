@@ -5,10 +5,9 @@ namespace consumer.DataAccess.PostgreSQL
     public class ContractDBContext(DbContextOptions<ContractDBContext> options) : DbContext(options)
     {
         public DbSet<Contract> Contracts { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
-
             modelBuilder.Entity<Contract>(entity =>
             {
                 entity.ToTable("contracts");

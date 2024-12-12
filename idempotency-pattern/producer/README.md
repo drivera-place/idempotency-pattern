@@ -18,9 +18,9 @@ dotnet add package Microsoft.Azure.Functions.Worker.Extensions.ServiceBus --vers
 ## Run locally
 
 ```bash
-export resource_group_name=$(cd ../idempotency_infrastructure && terraform output -raw resource_group_name) \
-export servicebus_namespace_name=$(cd ../idempotency_infrastructure && terraform output -raw servicebus_namespace_name) \
-export producer_function_name=$(cd ../idempotency_infrastructure && terraform output -raw producer_function_name)
+export resource_group_name=$(cd ../infra/terraform && terraform output -raw resource_group_name) \
+export servicebus_namespace_name=$(cd ../infra/terraform && terraform output -raw servicebus_namespace_name) \
+export producer_function_name=$(cd ../infra/terraform && terraform output -raw producer_function_name)
 ```
 
 ```bash
@@ -38,7 +38,7 @@ func start
 
 ```bash
 curl -H 'Content-Type: application/json' \
--d '{ "contractid" : "0001", "name" : "drivera-place"}' \
+-d '{ "ContractId" : "99", "Name" : "drivera-place"}' \
 -X POST \
 http://localhost:7071/api/Producer
 ```
@@ -46,6 +46,6 @@ http://localhost:7071/api/Producer
 ## Publish app to Azure
 
 ```bash
-export producer_function_name=$(cd ../idempotency_infrastructure && terraform output -raw producer_function_name) && \
+export producer_function_name=$(cd ../infra/terraform && terraform output -raw producer_function_name) && \
 func azure functionapp publish $producer_function_name --publish-local-settings
 ```

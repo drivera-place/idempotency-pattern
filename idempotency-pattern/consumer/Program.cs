@@ -1,7 +1,6 @@
 using consumer.DataAccess.PostgreSQL;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -18,7 +17,6 @@ namespace consumer
             });
 
             builder.Services.AddScoped<IContractRepository,ContractRepository>();
-
             builder.Build().Run();
         }
     }
